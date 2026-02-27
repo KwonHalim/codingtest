@@ -6,7 +6,7 @@ def solution(players, m, k):
     
     for i in range(n):
         if(players[i] < (server[i] + 1) * m):
-            continue
+            pass
         else:
             now = server[i] * m
             need = (players[i] - now) // m
