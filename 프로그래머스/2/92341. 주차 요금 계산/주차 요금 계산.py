@@ -1,43 +1,42 @@
-import math
-# math.ceil()
-
+from math import ceil
 
 def solution(fees, records):
     answer = []
     dic = {}
-    park_time = {}
+    car_fee = {}
+    
+    
     for record in records:
-        time, car, state = record.split(" ")
-        h, m = time.split(":")
-        if state == "IN":
-            dic[car] = int(h)*60+int(m)
-        elif state == "OUT":
+        a,car,park = map(str, record.split(" "))
+        # print(a,b,c)
+        h,m = map(int,a.split(":"))
+        time = h*60 + m
+        # print(time,car,park)
+        
+        if park == 'IN':
+            dic[car] = time
+            
+        elif park == 'OUT':
             in_time = dic[car]
-            park = (int(h)*60+int(m)) - in_time
-            
-            if car in park_time:
-                park_time[car] += park
+            park_time = time - in_time
+            if car in car_fee:
+                car_fee[car] = car_fee[car] + park_time
             else:
-                park_time[car] = park
-            
-            dic.pop(car)
-            
-            
-    for left in dic:
-        time = 23*60+59 - dic[left]
-        if left in park_time:
-            park_time[left]+= time
+                car_fee[car] = park_time
+            del dic[car]
+#             입차 기록은 있으나 나가지 12시가 넘어도 나가지 않은 차들
+    for car in dic:
+        max_time = 23*60+59
+        if car in car_fee:
+            car_fee[car] += max_time - dic[car]
         else:
-            park_time[left] = time
-                
-    final = sorted(park_time.items())
-    print(final)
-#   기본 시간, 기본 요금, 단위 시간, 단위 요금
-    base_time, base_fee, unit_time, unit_fee = fees
-    for car_num, total_time in final:
-        if total_time <= base_time:
-            answer.append(base_fee)
+            car_fee[car] = max_time - dic[car]    
+    car_fee = sorted(car_fee.items(), key = lambda x : x[0])
+    # print(car_fee)
+    for cars in car_fee:
+        num, time = cars
+        if time > fees[0]:
+            answer.append(fees[1]+ ceil( (time-fees[0]) / fees[2] ) * fees[3])
         else:
-            fee = base_fee + math.ceil((total_time - base_time) / unit_time) * unit_fee
-            answer.append(fee)
+            answer.append(fees[1])
     return answer
