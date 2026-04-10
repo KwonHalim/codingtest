@@ -16,13 +16,26 @@ def solution(survey, choices):
         else:
             pass
         idx+=1
-        
-        
-    pairs = [('R', 'T'), ('C', 'F'), ('J', 'M'), ('A', 'N')]
-    
-    for p1, p2 in pairs:
-        if dic[p1] >= dic[p2]:
-            answer += p1
-        else:
-            answer += p2
-    return answer
+
+    type = ""
+    if dic["R"] >= dic["T"]:
+        type += "R"
+    else:
+        type += "T"
+
+    if dic["C"] >= dic["F"]:
+        type += "C"
+    else:
+        type += "F"
+
+    if dic["J"] >= dic["M"]:
+        type += "J"
+    else:
+        type += "M"
+
+    if dic["A"] >= dic["N"]:
+        type += "A"
+    else:
+        type += "N"
+
+    return type
